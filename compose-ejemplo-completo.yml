@@ -1,0 +1,64 @@
+version: '3.9' # Versión del archivo docker-compose
+
+services:
+  frontend:
+    image: node:14 # Imagen de Node.js para construir el frontend
+    container_name: frontend_container # Nombre del contenedor
+    build:
+      context: ./frontend # Contexto de construcción, el directorio del Dockerfile
+      dockerfile: Dockerfile # Nombre del Dockerfile
+    ports:
+      - "3000:3000" # Mapeo de puertos (host:contenedor)
+    volumes:
+      - ./frontend/src:/app/src # Montaje de volúmenes para desarrollo en caliente
+    environment:
+      - NODE_ENV=development # Variables de entorno
+    depends_on:
+      - backend # Dependencia, asegura que backend se inicie antes
+    networks:
+      - frontend_network # Red personalizada
+
+  # Servicio del backend
+  backend:
+    image: python:3.9 # Imagen de Python para construir el backend
+    container_name: backend_container # Nombre del contenedor
+    build:
+      context: ./backend # Contexto de construcción, el directorio del Dockerfile
+      dockerfile: Dockerfile # Nombre del Dockerfile
+    ports:
+      - "8000:8000" # Mapeo de puertos (host:contenedor)
+    volumes:
+      - ./backend/src:/app/src # Montaje de volúmenes para desarrollo en caliente
+    environment:
+      - FLASK_ENV=development # Variables de entorno
+      - DATABASE_URL=postgres://user:password@db:5432/mydatabase # Variable de entorno para la base de datos
+    depends_on:
+      - db # Dependencia, asegura que db se inicie antes
+    networks:
+      - backend_network # Red personalizada
+
+  # Servicio de la base de datos
+  db:
+    image: postgres:13 # Imagen de PostgreSQL
+    container_name: db_container # Nombre del contenedor
+    ports:
+      - "5432:5432" # Mapeo de puertos (host:contenedor)
+    volumes:
+      - db_data:/var/lib/postgresql/data # Volumen para persistencia de datos
+    environment:
+      - POSTGRES_DB=mydatabase # Variables de entorno para configurar la base de datos
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    networks:
+      - backend_network # Red personalizada
+
+# Definición de volúmenes
+volumes:
+  db_data: # Volumen para la base de datos
+
+# Definición de redes
+networks:
+  frontend_network:
+    driver: bridge # Tipo de red
+  backend_network:
+    driver: bridge # Tipo de red

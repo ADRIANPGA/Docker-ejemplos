@@ -1,0 +1,10 @@
+docker container exec -it nucleo mongo
+docker exec -it manto bin/bash
+docker exec -it manto mongo 172.16.238.5
+
+
+use admin
+db.auth({user:"core", pwd:"3480"})
+
+use geothermos
+db.temperatures.find().sort({calefactor_top: 1})

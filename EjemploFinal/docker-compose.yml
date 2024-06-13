@@ -1,0 +1,86 @@
+name: notas-app
+
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+    environment:
+      - BACKEND_URL=http://traefik:80/api
+    depends_on:
+      - backend
+    deploy:
+      replicas: 2
+    networks:
+      - frontend_network
+      - backend_network
+
+  # Backend service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/mydatabase
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
+    depends_on:
+      - mongodb
+    deploy:
+      replicas: 2
+    networks:
+      - backend_network
+
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: final-mongo
+    hostname: mongodb
+    volumes:
+      - mongo_data:/data/db
+      - ./database/build:/docker-entrypoint-initdb.d
+    networks:
+      - backend_network
+
+  # Mongoclient
+  mongoclient:
+    image: mongoclient/mongoclient:latest
+    container_name: final-mongoclient
+    hostname: mongoclient
+    networks:
+      - backend_network
+  # 
+
+  traefik:
+    image: traefik:v2.5
+    hostname: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "7070:80" # Traefik HTTP entrypoint
+      - "8443:8443" # Secured entrypoint for internal services
+      - "7071:8080" # Traefik dashboard
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - frontend_network
+      - backend_network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+networks:
+  frontend_network:
+  backend_network:
+
+volumes:
+  mongo_data:

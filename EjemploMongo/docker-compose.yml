@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  manto:
+    image: mongoclient/mongoclient:4.0.0
+    container_name: manto
+    hostname: manto
+    restart: always
+    networks:
+      tierra:
+        ipv4_address: 172.16.238.10
+        ipv6_address: 2001:3984:3989::10
+  nucleo:
+    image: mongo:4.2
+    container_name: nucleo
+    hostname: nucleo
+    volumes:
+      - ./h2:/data/db
+      - ./build:/docker-entrypoint-initdb.d
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=core
+      - MONGO_INITDB_ROOT_PASSWORD=3480
+    restart: always
+    networks:
+      tierra:
+        ipv4_address: 172.16.238.5
+        ipv6_address: 2001:3984:3989::5
+    command: mongod --bind_ip 172.16.238.5
+    
+networks:
+  tierra:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.238.0/24"
+        - subnet: "2001:3984:3989::/64"

@@ -1,0 +1,18 @@
+name: python-app
+
+services:
+  python-app:
+    container_name: python-app-container
+    image: python-app:2.0.0
+    environment:
+      - APP_PORT=8082
+    ports:
+      - "8080:8082" # Local port is APP_PORT or 8080 and host port is 8080
+
+  python-app-2:
+    image: python-app:2.0.0
+    environment:
+      - APP_PORT=8082
+    ports:
+      - "8081:8082" # Local port is APP_PORT or 8080 and host port is 8080
+      

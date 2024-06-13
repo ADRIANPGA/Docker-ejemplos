@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  chatbot:
+    image: adrianpga/chatbot:1.0.0
+    container_name: chatbot
+    ports:
+      - "8505:8501"
+    environment:
+      - TEMPERATURE=0.9

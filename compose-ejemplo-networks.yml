@@ -1,0 +1,35 @@
+services:
+  frontend:
+    image: angular-app
+    ports:
+      - "443:8043"
+    networks:
+      - front-tier
+    configs:
+      - httpd-config
+    secrets:
+      - server-certificate
+
+  backend:
+    image: python-app
+    networks:
+      - front-tier
+      - back-tier
+
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+    driver: flocker
+    driver_opts:
+      size: "10GiB"
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}

@@ -1,0 +1,6 @@
+streamlit
+scikit-learn
+langchain-core
+langchain-community
+runs
+cmake
