@@ -9,11 +9,12 @@ services:
     networks:
       tierra:
         ipv4_address: 172.16.238.10
-        ipv6_address: 2001:3984:3989::10
   nucleo:
     image: mongo:4.2
     container_name: nucleo
     hostname: nucleo
+    ports:
+      - "27017:27017"
     volumes:
       - ./h2:/data/db
       - ./build:/docker-entrypoint-initdb.d
@@ -24,7 +25,6 @@ services:
     networks:
       tierra:
         ipv4_address: 172.16.238.5
-        ipv6_address: 2001:3984:3989::5
     command: mongod --bind_ip 172.16.238.5
     
 networks:
@@ -33,4 +33,3 @@ networks:
     ipam:
       config:
         - subnet: "172.16.238.0/24"
-        - subnet: "2001:3984:3989::/64"
