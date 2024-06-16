@@ -7,6 +7,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=PathPrefix(`/`)"
       - "traefik.http.services.web.loadbalancer.server.port=8080"
+    deploy:
+      replicas: 3 # Lo mismo que docker compose up --scale web=3
 
   traefik:
     image: traefik:v2.5
