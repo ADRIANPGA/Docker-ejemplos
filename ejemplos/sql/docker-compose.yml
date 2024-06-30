@@ -2,9 +2,8 @@ name: mysql-app
 
 services:
   db:
-    build: .
-    container_name: mysql-container
     image: mysql:latest
+    container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: testdb

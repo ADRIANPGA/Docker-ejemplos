@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     print('Handling request to root URL /')
-    return 'Hello, World 9!'
+    return 'Hello, World!'
 
 if __name__ == '__main__':
     port=os.getenv('APP_PORT', 8080)

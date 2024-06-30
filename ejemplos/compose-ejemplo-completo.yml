@@ -55,6 +55,9 @@ services:
 # Definición de volúmenes
 volumes:
   db_data: # Volumen para la base de datos
+    driver: local # Tipo de driver
+    driver_opts:
+      size: "10GiB"
 
 # Definición de redes
 networks:

@@ -1,0 +1,7 @@
+services:
+  web:
+    image: custom-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/src

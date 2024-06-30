@@ -1,3 +1,8 @@
+# Useful commands
+
+## Check DB changes
+
+```bash
 mongo mongodb://mongodb:27017/sample_db
 db.random_collection.find()
 db.random_collection.insertMany([
@@ -12,3 +17,4 @@ db.random_collection.insertMany([
     value: 9.21
   }
 ])
+```
