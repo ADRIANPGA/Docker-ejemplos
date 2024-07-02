@@ -9,10 +9,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    print('Handling request to root URL /')
-    return 'Hello, World!'
+    return 'Hello, World 2!'
 
 if __name__ == '__main__':
     port=os.getenv('APP_PORT', 8080)
-    app.run(host='0.0.0.0', port=port, debug=True)
     print(f'Server running on port {port}')
+    app.run(host='0.0.0.0', port=port, debug=True)

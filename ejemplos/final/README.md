@@ -1,4 +1,6 @@
-# Useful commands
+# Ejemplo Final
+
+Levantar un esquema de aplicación compleja con escalabilidad tanto en backend como en frontend, persistencia de base de datos y acceso a esta solo desde el backend, combinando imagenes ya creadas (base de datos) con imagenes construidas con Dockerfile (backend y frontend)
 
 ## Check DB changes
 
